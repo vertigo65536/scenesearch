@@ -27,18 +27,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(yz327u1=xcy_qgwh%@$cawhkur%_gtg@w!ppa6$gkzu!_qsfk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-'https://scene.djwt.xyz'
+'https://scene.djwt.xyz', 'http://localhost'
 ]
 ALLOWED_HOSTS = [
-'scene.djwt.xyz',
+'scene.djwt.xyz', 'localhost'
 ]
 CORS_ORIGIN_WHITELIST = [
-'https://scene.djwt.xyz',
+'https://scene.djwt.xyz', 'http://localhost'
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -143,16 +143,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT= '/static/'
-STATICFILES_DIRS = [
-    "/home/david/Videos/TV Shows"
-]
+STATIC_URL = os.getenv("STATIC_URL")
+STATIC_ROOT= os.getenv("STATIC_ROOT")
+#STATICFILE_DIRS = ('static', )
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CLIP_ROOT = "/media/Storage/clips/"
-MEDIA_SERVER = "https://clips.djwt.xyz/"
+CLIP_ROOT =  os.getenv("CLIP_ROOT") 
+MEDIA_SERVER = os.getenv("MEDIA_SERVER")
