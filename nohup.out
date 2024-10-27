@@ -1,0 +1,78 @@
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+[25/Oct/2024 10:13:23] "GET /favicon.ico HTTP/1.1" 404 2987
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 25, 2024 - 10:12:59
+Django version 5.1.2, using settings 'scenesearch_project.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+[25/Oct/2024 10:46:51] "GET / HTTP/1.1" 200 326
+[25/Oct/2024 10:47:00] "GET /search/?q=I+think+I+broke+my+nose HTTP/1.1" 200 2678
+[25/Oct/2024 10:47:03] "POST /genclip/ HTTP/1.1" 200 134
+Watching for file changes with StatReloader
+[26/Oct/2024 03:48:16] "POST /genclip/ HTTP/1.1" 200 133
+[26/Oct/2024 03:49:12] "GET /admin/shows/clip/ HTTP/1.1" 200 11238
+[26/Oct/2024 03:49:12] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[26/Oct/2024 03:49:15] "POST /admin/shows/clip/ HTTP/1.1" 200 9037
+[26/Oct/2024 03:49:16] "POST /admin/shows/clip/ HTTP/1.1" 302 0
+[26/Oct/2024 03:49:16] "GET /admin/shows/clip/ HTTP/1.1" 200 9120
+[26/Oct/2024 03:49:16] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[26/Oct/2024 03:49:20] "GET /search/?q=i+keep+the+xbox HTTP/1.1" 200 761
+[mp3float @ 0x5569701b6d40] Header missing
+[aist#0:1/mp3 @ 0x556970162540] Error submitting packet to decoder: Invalid data found when processing input
+[26/Oct/2024 03:49:24] "POST /genclip/ HTTP/1.1" 200 133
+[26/Oct/2024 03:59:19] "GET / HTTP/1.1" 200 326
+[26/Oct/2024 03:59:28] "GET /search/?q=lava+in+metroid HTTP/1.1" 200 1561
+[mp3float @ 0x55d17288b540] Header missing
+[aist#0:1/mp3 @ 0x55d17282f540] Error submitting packet to decoder: Invalid data found when processing input
+[mp3float @ 0x55d17288b540] Header missing
+[aist#0:1/mp3 @ 0x55d17282f540] Error submitting packet to decoder: Invalid data found when processing input
+[mp3float @ 0x55d17288b540] Header missing
+[aist#0:1/mp3 @ 0x55d17282f540] Error submitting packet to decoder: Invalid data found when processing input
+[26/Oct/2024 03:59:39] "POST /genclip/ HTTP/1.1" 200 133
+[26/Oct/2024 04:05:31] "GET / HTTP/1.1" 200 326
+[26/Oct/2024 04:05:59] "GET /search/?q=arcade+style HTTP/1.1" 200 759
+[mp3float @ 0x55cd23318680] Header missing
+[aist#0:1/mp3 @ 0x55cd232f7640] Error submitting packet to decoder: Invalid data found when processing input
+[mp3float @ 0x55cd23318680] Header missing
+[aist#0:1/mp3 @ 0x55cd232f7640] Error submitting packet to decoder: Invalid data found when processing input
+[26/Oct/2024 04:06:07] "POST /genclip/ HTTP/1.1" 200 133
+[26/Oct/2024 04:06:40] "GET /search/?q=arcade+style HTTP/1.1" 200 759
+[mp3float @ 0x5604ea827680] Header missing
+[aist#0:1/mp3 @ 0x5604ea806640] Error submitting packet to decoder: Invalid data found when processing input
+[26/Oct/2024 04:06:46] "POST /genclip/ HTTP/1.1" 200 133
+[26/Oct/2024 07:12:20] "GET / HTTP/1.1" 200 326
+Not Found: /favicon.ico
+[26/Oct/2024 07:12:20] "GET /favicon.ico HTTP/1.1" 404 2987
+[26/Oct/2024 07:12:21] "GET / HTTP/1.1" 200 326
+Not Found: /favicon.ico
+[26/Oct/2024 09:36:40] "GET /favicon.ico HTTP/1.1" 404 2987
+[26/Oct/2024 17:36:09] "GET / HTTP/1.1" 200 326
+[26/Oct/2024 17:36:11] "GET /static/Season%2006/South%20Park%20-%20S06E17%20-%20Red%20Sleigh%20Down.mp4 HTTP/1.1" 200 198964507
+[26/Oct/2024 17:36:13] "GET /search/?q=test HTTP/1.1" 200 1527
+[in#0 @ 0x557c9217a500] Error opening input: Input/output error
+Error opening input file /media/Video/TV Shows/purepwnage/Season 2/Episode 13 - Old Habits/Episode 13 - Old Habits.avi.
+Error opening input files: Input/output error
+[26/Oct/2024 17:36:15] "POST /genclip/ HTTP/1.1" 200 156
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 26, 2024 - 03:48:12
+Django version 5.1.2, using settings 'scenesearch_project.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Triggered
+<QuerySet [<Quote: 1872>]>
+2
+<QuerySet [<Quote: 4552>, <Quote: 4856>]>
+3
+<QuerySet [<Quote: 4922>]>
+4
+<QuerySet [<Quote: 4922>]>
+5
+<QuerySet [<Quote: 1539>, <Quote: 1864>]>

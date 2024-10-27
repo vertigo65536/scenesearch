@@ -1,0 +1,9 @@
+{% load static %}
+<h1> homepage </h1>
+
+<form action="{% url 'search_results' %}" method="get">
+  <input name="q" type="text" placeholder="Search...">
+</form>
+<video id="yourVideoplayer" width="640" height="480" preload="auto">
+        <source src="{% static "Season 06/South Park - S06E17 - Red Sleigh Down.mp4"%}#t=30,45" type="video/mp4"/>
+</video>
