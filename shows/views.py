@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, ListView
 from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.conf import settings
-from django.contrib.postgres.search import TrigramWordDistance
+from django.contrib.postgres.search import TrigramStrictWordDistance
 import os
 from django.http import HttpResponseRedirect
 import datetime
@@ -49,15 +49,9 @@ class SearchResultsView(ListView):
     template_name = 'search_results.html'
     def get_queryset(self):
         q = self.request.GET.get("q")
-        vector = SearchVector('quote_text')
-        query = SearchQuery(q)
-        object_list = Quote.objects.annotate(search=vector).filter(search=query)
-        object_list = Quote.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank')
-        #object_list = Quote.objects.annotate(
-        #    distance=TrigramWordDistance('quote_text', query),
-        #).filter(distance__lte=0.7).order_by('distance')
-        #object_list = Quote.objects.filter(quote_text__trigram_similar=query)
-        print(object_list)
+        object_list = Quote.objects.annotate(
+            distance=TrigramStrictWordDistance(q, 'quote_text'),
+        ).filter(distance__lte=0.7).order_by('distance')
         return object_list
 
 class GenClipView(TemplateView):
