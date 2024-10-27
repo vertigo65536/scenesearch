@@ -5,6 +5,7 @@
     <li>
         <form action="{% url 'genclip' %}" method="post">
                 {{ quote.quote_text }}
+                {{ quote.distance }}
                 {% csrf_token %}
                 <input type="hidden" id="clip_id" name="q" value={{quote.quote_id}}>
                 <button type="submit" id="start_button" name="t" value="s">Start with quote</button>

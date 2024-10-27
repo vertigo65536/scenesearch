@@ -22,3 +22,4 @@ admin.site.register(Show, ShowAdmin)
 admin.site.register(Episode, EpisodeAdmin)
 admin.site.register(Quote, QuoteAdmin)
 admin.site.register(Clip, ClipAdmin)
+

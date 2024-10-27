@@ -3,10 +3,17 @@ from django.views.generic import TemplateView, ListView
 from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.conf import settings
-from django.contrib.postgres.search import TrigramStrictWordDistance
+from django.contrib.postgres.search import TrigramWordDistance
 import os
 from django.http import HttpResponseRedirect
 import datetime
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, permissions
+from rest_framework import permissions
+
+from .serializers import QuoteSerializer 
 # Create your views here.
 
 from .models import Quote, Clip, Episode
@@ -36,6 +43,18 @@ def add_time(time, value):
             microsecond = microsecond
     )
 
+def searchQuote(query, show=None):
+    try:
+        object_list = Quote.objects.annotate(
+            distance=TrigramWordDistance(query, 'quote_text'),
+        ).filter(distance__lte=0.5).order_by('distance')
+        if show != None:
+            object_list = object_list.filter(episode_id__show_id__name = show)
+        return object_list
+    except Quote.DoesNotExist:
+        return None
+
+
 class HomePageView(TemplateView):
     template_name = 'home.html'
     videoPath = "/home/david/Videos/TV Shows/Season 06/South Park - S06E17 - Red Sleigh Down.mp4"
@@ -50,8 +69,8 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         q = self.request.GET.get("q")
         object_list = Quote.objects.annotate(
-            distance=TrigramStrictWordDistance(q, 'quote_text'),
-        ).filter(distance__lte=0.7).order_by('distance')
+            distance=TrigramWordDistance(q, 'quote_text'),
+        ).filter(distance__lte=0.5).order_by('distance')
         return object_list
 
 class GenClipView(TemplateView):
@@ -108,4 +127,20 @@ class GenClipView(TemplateView):
             return render(request, template_name, variables)
         else:
             return HttpResponseRedirect('/')
+
+class ShowsAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    print(permission_classes)
+    def get(self, request, show=None, query = None, *args, **kwargs):
+        '''
+        Retrieves the Todo with given todo_id
+        '''
+        quote_objects = searchQuote(query, show)
+        if not quote_objects:
+            return Response(
+                {"res": "Object matching quote does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = QuoteSerializer(quote_objects, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 

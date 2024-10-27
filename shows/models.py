@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 # Create your models here.
 
@@ -46,3 +47,4 @@ class Clip(models.Model):
         verbose_name_plural = "clips"
     def __str__(self):
         return str(self.clip_id)
+
