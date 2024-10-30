@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework import permissions
+from rest_framework_api_key.permissions import HasAPIKey
 
 from .serializers import QuoteSerializer 
 # Create your views here.
@@ -132,7 +133,7 @@ class GenClipView(TemplateView):
             return HttpResponseRedirect('/')
 
 class ShowsAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
     print(permission_classes)
     def get(self, request, show=None, query = None, *args, **kwargs):
         '''
