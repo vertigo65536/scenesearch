@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, ListView
 from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.conf import settings
-from django.contrib.postgres.search import TrigramWordDistance
+from django.contrib.postgres.search import TrigramStrictWordDistance
 
 import os
 from django.http import HttpResponseRedirect
@@ -48,7 +48,7 @@ def add_time(time, value):
 def searchQuote(query, show=None, showtype=None):
     try:
         object_list = Quote.objects.annotate(
-            distance=TrigramWordDistance(query, 'quote_text'),
+            distance=TrigramStrictWordDistance(query, 'quote_text'),
         ).filter(distance__lte=0.5).order_by('distance')
         if show != None:
             if showtype == "id" or showtype == None:
@@ -63,7 +63,6 @@ def searchQuote(query, show=None, showtype=None):
 class HomePageView(TemplateView):
     def homepage_view(request):
         template_name = 'home.html'
-        videoPath = "/home/david/Videos/TV Shows/Season 06/South Park - S06E17 - Red Sleigh Down.mp4"
         showList = Show.objects.all()
         return render(request, template_name, {'showList': showList})
 
@@ -116,7 +115,7 @@ class GenClipView(TemplateView):
                 newEntry.refresh_from_db()
                 outputname = str(newEntry.clip_id) + ".mp4"
                 path = os.path.join(settings.CLIP_ROOT, outputname)
-                ffmpegError = os.system("ffmpeg -y -ss "+str(start)+" -to "+str(end)+" -i '" + episode.path + "' -f mp4 "+path+" -loglevel error")
+                ffmpegError = os.system("ffmpeg -y -ss "+str(start)+" -to "+str(end)+" -i '" + episode.path + "' -c copy "+path+" -loglevel error")
                 if ffmpegError != 0:
                     newEntry.delete()
                     variables['error'] = "ffmpeg encoding failed!"
