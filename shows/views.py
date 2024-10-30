@@ -16,7 +16,7 @@ from rest_framework import permissions
 from .serializers import QuoteSerializer 
 # Create your views here.
 
-from .models import Quote, Clip, Episode
+from .models import Quote, Clip, Episode, Show
 
 def add_time(time, value):
     hour = time.hour
@@ -43,34 +43,39 @@ def add_time(time, value):
             microsecond = microsecond
     )
 
-def searchQuote(query, show=None):
+def searchQuote(query, show=None, showtype=None):
     try:
         object_list = Quote.objects.annotate(
             distance=TrigramWordDistance(query, 'quote_text'),
         ).filter(distance__lte=0.5).order_by('distance')
         if show != None:
-            object_list = object_list.filter(episode_id__show_id__name = show)
+            if showtype == "id" or showtype == None:
+                object_list = object_list.filter(episode_id__show_id__show_id = show)
+            elif showtype == "name":
+                object_list = object_list.filter(episode_id__show_id__name = show)
         return object_list
     except Quote.DoesNotExist:
         return None
 
 
 class HomePageView(TemplateView):
-    template_name = 'home.html'
-    videoPath = "/home/david/Videos/TV Shows/Season 06/South Park - S06E17 - Red Sleigh Down.mp4"
-    #print(os.path.isfile(videoPath))
-    #print(settings.MEDIA_ROOT)
-    #ffmpeg_extract_subclip(videoPath, 33, 53, targetname="test.mp4")
-    #os.system("ffmpeg -y -ss 00:00:30 -to 00:00:50 -i '" + videoPath + "' -c copy test.mp4")
+    def homepage_view(request):
+        template_name = 'home.html'
+        videoPath = "/home/david/Videos/TV Shows/Season 06/South Park - S06E17 - Red Sleigh Down.mp4"
+        showList = Show.objects.all()
+        return render(request, template_name, {'showList': showList})
+
 
 class SearchResultsView(ListView):
     model = Quote
     template_name = 'search_results.html'
     def get_queryset(self):
         q = self.request.GET.get("q")
-        object_list = Quote.objects.annotate(
-            distance=TrigramWordDistance(q, 'quote_text'),
-        ).filter(distance__lte=0.5).order_by('distance')
+        show = self.request.GET.get("show")
+        if show == 'all':
+            object_list = searchQuote(q)
+        else:
+            object_list = searchQuote(q, show)
         return object_list
 
 class GenClipView(TemplateView):
@@ -109,18 +114,16 @@ class GenClipView(TemplateView):
                 newEntry.refresh_from_db()
                 outputname = str(newEntry.clip_id) + ".mp4"
                 path = os.path.join(settings.CLIP_ROOT, outputname)
-                ffmpegError = os.system("ffmpeg -y -ss "+str(start)+" -to "+str(end)+" -i '" + episode.path + "' -vcodec libx264 -f mp4 "+path+" -loglevel error")
+                ffmpegError = os.system("ffmpeg -y -ss "+str(start)+" -to "+str(end)+" -i '" + episode.path + "' -f mp4 "+path+" -loglevel error")
                 if ffmpegError != 0:
                     newEntry.delete()
                     variables['error'] = "ffmpeg encoding failed!"
                 else:
-                    print(newEntry.clip_id)
                     newEntry.clip_path = path
                     newEntry.save()
                 variables['video'] = settings.MEDIA_SERVER + outputname
                 return render(request, template_name, variables)
             else:
-                print("Triggered")
                 for clip in existCheck:
                     videoLink = clip.clip_path.replace(settings.CLIP_ROOT, settings.MEDIA_SERVER)
                     variables['video'] = videoLink
@@ -135,7 +138,7 @@ class ShowsAPIView(APIView):
         '''
         Retrieves the Todo with given todo_id
         '''
-        quote_objects = searchQuote(query, show)
+        quote_objects = searchQuote(query, show, "name")
         if not quote_objects:
             return Response(
                 {"res": "Object matching quote does not exists"},
