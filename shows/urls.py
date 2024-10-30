@@ -1,9 +1,10 @@
 # cities/urls.py
 from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
 
 from .views import HomePageView, SearchResultsView, GenClipView, ShowsAPIView
 urlpatterns = [
-    path("search/", SearchResultsView.as_view(), name="search_results"),
+    path("search/", csrf_exempt(SearchResultsView.as_view()), name="search_results"),
     path("", HomePageView.homepage_view, name="home"),
     path("genclip/", GenClipView.get_clipdata, name="genclip"),
     path("api/quote/", ShowsAPIView.as_view(), name="quoteapi"),

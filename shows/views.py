@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.conf import settings
 from django.contrib.postgres.search import TrigramWordDistance
+
 import os
 from django.http import HttpResponseRedirect
 import datetime
@@ -66,10 +67,10 @@ class HomePageView(TemplateView):
         showList = Show.objects.all()
         return render(request, template_name, {'showList': showList})
 
-
 class SearchResultsView(ListView):
     model = Quote
     template_name = 'search_results.html'
+
     def get_queryset(self):
         q = self.request.GET.get("q")
         show = self.request.GET.get("show")

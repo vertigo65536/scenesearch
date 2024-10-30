@@ -7,7 +7,10 @@ import srt
 class Command(BaseCommand):
     help = "Fetch all quotes from shows in the database"
 
-    def handle(self, *args, **kwargs):
+    def add_arguments(self, parser):
+        parser.add_argument("-f", "--force", help="Force Readding", action='store_true')
+
+    def handle(self, *args, **options):
 
         def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
             """
@@ -26,7 +29,7 @@ class Command(BaseCommand):
             percent = ' '*(5-len(percent)) + percent
             filledLength = int(length * iteration // total)
             bar = fill * filledLength + '-' * (length - filledLength)
-            width = os.get_terminal_size()[0]
+            width = os.get_terminal_size()[0]-4
             barLength = len(f' |{bar}| {percent}% {suffix}')
             prefix = prefix[:width-barLength-3] + (prefix[width-barLength-3:] and '...')
             fillSpaceLength = width - len(prefix) - barLength
@@ -37,8 +40,10 @@ class Command(BaseCommand):
                 print()
 
 
-        Episode.objects.all().delete()
-        Quote.objects.all().delete()
+
+        if options['force'] == True:
+            Episode.objects.all().delete()
+            Quote.objects.all().delete()
         #return
         showlist = Show.objects.all()
         thumbPath = settings.CLIP_ROOT
@@ -50,6 +55,10 @@ class Command(BaseCommand):
                 for file in files:
                     if file.endswith((".mkv", ".mp4", ".avi")):
                         vidPath = os.path.join(root, file)
+                        existsCheck = Episode.objects.filter(path = vidPath)
+                        if existsCheck:
+                            print("DB Entry exists for " + vidPath + ". Skipping.")
+                            continue
                         for rfile in files:
                             if os.path.splitext(file)[0] in rfile and rfile.endswith(".srt"):
                                 subPath = os.path.join(root, rfile)
