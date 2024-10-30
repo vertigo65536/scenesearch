@@ -5,7 +5,7 @@ from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.conf import settings
 from django.contrib.postgres.search import TrigramStrictWordDistance
 
-import os
+import os, shlex
 from django.http import HttpResponseRedirect
 import datetime
 
@@ -115,7 +115,7 @@ class GenClipView(TemplateView):
                 newEntry.refresh_from_db()
                 outputname = str(newEntry.clip_id) + ".mp4"
                 path = os.path.join(settings.CLIP_ROOT, outputname)
-                ffmpegError = os.system("ffmpeg -y -ss "+str(start)+" -to "+str(end)+" -i '" + episode.path + "' -c copy "+path+" -loglevel error")
+                ffmpegError = os.system("ffmpeg -y -ss "+str(start)+" -to "+str(end)+" -i " + shlex.quote(episode.path) + " -c:v libx264 -c:a aac -preset ultrafast "+path+" -loglevel error")
                 if ffmpegError != 0:
                     newEntry.delete()
                     variables['error'] = "ffmpeg encoding failed!"
