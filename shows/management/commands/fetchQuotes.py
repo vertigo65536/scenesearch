@@ -23,12 +23,19 @@ class Command(BaseCommand):
                 printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
             """
             percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+            percent = ' '*(5-len(percent)) + percent
             filledLength = int(length * iteration // total)
             bar = fill * filledLength + '-' * (length - filledLength)
+            width = os.get_terminal_size()[0]
+            barLength = len(f' |{bar}| {percent}% {suffix}') - 2
+            prefix = prefix[:width-barLength] + (prefix[width-barLength:] and '...')
+            fillSpaceLength = width - len(prefix) - barLength -2
+            prefix = prefix + ' '*fillSpaceLength
             print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
             # Print New Line on Complete
             if iteration == total: 
                 print()
+
 
         Episode.objects.all().delete()
         Quote.objects.all().delete()
@@ -60,7 +67,8 @@ class Command(BaseCommand):
                         with open(subPath, 'r') as subFile:
                             sub = list(srt.parse(subFile.read()))
                             for i in range(len(sub)):
-                                printProgressBar(i, total=len(sub)-1, prefix=file, length=50)
+                                loadingLength = 50
+                                printProgressBar(i, total=len(sub)-1, prefix=file, length=loadingLength, fill="#")
                                 quoteThumbPath = os.path.join(episodeThumbPath, str(sub[i].index) + ".bmp")
                                 #os.system("ffmpeg -y -i '" + vidPath + "' -ss " + str(sub[i].start) + " -s 150x85 -vframes 1 '" + quoteThumbPath + "' -loglevel error")
                                 Quote.objects.create(
