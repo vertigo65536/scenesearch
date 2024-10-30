@@ -27,9 +27,9 @@ class Command(BaseCommand):
             filledLength = int(length * iteration // total)
             bar = fill * filledLength + '-' * (length - filledLength)
             width = os.get_terminal_size()[0]
-            barLength = len(f' |{bar}| {percent}% {suffix}') - 2
-            prefix = prefix[:width-barLength] + (prefix[width-barLength:] and '...')
-            fillSpaceLength = width - len(prefix) - barLength -2
+            barLength = len(f' |{bar}| {percent}% {suffix}')
+            prefix = prefix[:width-barLength-3] + (prefix[width-barLength-3:] and '...')
+            fillSpaceLength = width - len(prefix) - barLength
             prefix = prefix + ' '*fillSpaceLength
             print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
             # Print New Line on Complete
