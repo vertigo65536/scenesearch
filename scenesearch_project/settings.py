@@ -42,6 +42,8 @@ CORS_ORIGIN_WHITELIST = [
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 
