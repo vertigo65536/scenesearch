@@ -115,7 +115,7 @@ class GenClipView(TemplateView):
                 newEntry.refresh_from_db()
                 outputname = str(newEntry.clip_id) + ".mp4"
                 path = os.path.join(settings.CLIP_ROOT, outputname)
-                ffmpegError = os.system("ffmpeg -y -ss "+str(start)+" -to "+str(end)+" -i " + shlex.quote(episode.path) + " -c:v libx264 -c:a aac -preset ultrafast "+path+" -loglevel error")
+                ffmpegError = os.system("ffmpeg -y -ss "+str(start)+" -to "+str(end)+" -i " + shlex.quote(episode.path) + " -c:v     libx264 -c:a aac -ac 1 -preset ultrafast "+path+" -loglevel error")
                 if ffmpegError != 0:
                     newEntry.delete()
                     variables['error'] = "ffmpeg encoding failed!"
