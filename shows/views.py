@@ -45,11 +45,14 @@ def add_time(time, value):
             microsecond = microsecond
     )
 
-def searchQuote(query, show=None, showtype=None):
+def searchQuote(q, show=None, showtype=None):
     try:
-        object_list = Quote.objects.annotate(
-            distance=TrigramStrictWordDistance(query, 'quote_text'),
-        ).filter(distance__lte=0.5).order_by('distance')
+        #object_list = Quote.objects.annotate(
+        #    distance=TrigramStrictWordDistance(query, 'quote_text'),
+        #).filter(distance__lte=0.5).order_by('distance')
+        vector = SearchVector('quote_text')
+        query = SearchQuery(q)
+        object_list = Quote.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank')
         if show != None:
             if showtype == "id" or showtype == None:
                 object_list = object_list.filter(episode_id__show_id__show_id = show)
