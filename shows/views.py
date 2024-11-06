@@ -4,8 +4,13 @@ from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.conf import settings
 from django.contrib.postgres.search import TrigramStrictWordDistance
+from django.templatetags.static import static
 
-import os, shlex
+from django.template.loader import render_to_string
+from django.http import JsonResponse
+
+import os
+import shlex
 from django.http import HttpResponseRedirect
 import datetime
 
@@ -65,7 +70,22 @@ def searchQuote(q, show=None, showtype=None):
 
 class HomePageView(TemplateView):
     def homepage_view(request):
-        template_name = 'home.html'
+        q = request.GET.get("q")
+        show = request.GET.get("show")
+        template_name = 'home.html' 
+        if show == 'all':
+            object_list = searchQuote(q)
+        else:
+            object_list = searchQuote(q, show)
+        is_ajax_request = request.headers.get("x-requested-with") == "XMLHttpRequest"
+        if is_ajax_request:
+            html = render_to_string(
+                template_name="home-search-results.html",
+                context={"quotes": object_list}
+            )
+            print(html)
+            data_dict = {"html_from_view": html}
+            return JsonResponse(data=data_dict, safe=False)
         showList = Show.objects.all()
         return render(request, template_name, {'showList': showList})
 

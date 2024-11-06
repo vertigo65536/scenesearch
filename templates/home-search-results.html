@@ -1,0 +1,21 @@
+{% if quotes %}
+        <ul>
+                {% for quote in quotes %}
+                        <ul>
+                                <li>
+                                        <form action="{% url 'genclip' %}" method="post">
+                                                {{ quote.quote_text }}
+                                                <input type="hidden" id="clip_id" name="q" value={{quote.quote_id}}>
+                                                <button type="submit" id="start_button" name="t" value="s">Start with quote</button>
+                                                <button type="submit" id="end_button" name="t" value="e">end with quote</button>
+                                                <button type="submit" id="middle_button" name="t" value="c">Center quote</button>
+                                                <button type="submit" id="middle_button" name="t" value="j">Just quote</button>
+                                        </form>
+                                </li>
+                        </ul>
+
+                {% endfor %}
+        </ul>
+{% else %}
+        <p>No quotes found</p>
+{% endif %}

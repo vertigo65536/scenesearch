@@ -1,12 +1,30 @@
 {% load static %}
-<h1> homepage </h1>
-
-<form action="{% url 'search_results' %}" method="get">
-  <input name="q" type="text" placeholder="Search...">
-  <select name="show" id="show-selector">
-          <option value="all">All</option>
-          {% for show in showList %}
-          <option value={{show.show_id}}>{{show}}</option>
-          {% endfor %}
-</form>
-
+<html>
+<head>
+        <link rel="stylesheet" href="{% static 'css/home.css' %}">
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+        <div id="main">
+                <div class="center wrapper">
+                        <div id="search-content">
+                                <h1 class="title">Scene Search</h1>
+                                  <input autocomplete="off" name="q" type="text" placeholder="Search..." id="search-box" class="input-field">
+                                  <br>
+                                  <select name="show" id="show-selector" class="input-field">
+                                          <option value="all">All</option>
+                                          {% for show in showList %}
+                                          <option value={{show.show_id}}>{{show}}</option>
+                                          {% endfor %}
+                                </select>
+                                <div id="search-results">
+                                        {% include 'home-search-results.html' %}
+                                </div>
+                        </div>
+                </div>
+        </div>
+</body>
+{% block footer %}
+        <script type="text/javascript" src="{% static "js/home.js" %}"></script>
+{% endblock %}
+</html>

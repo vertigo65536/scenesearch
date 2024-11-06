@@ -1,0 +1,17 @@
+@import "base.css";
+
+button {
+        color: black;
+}
+
+#search-box {
+        margin: 5px;
+        color: white;
+        background-color: black;
+}
+
+#show-selector {
+        margin: 5px;
+        background: transparent;
+        text-align: center;
+}
