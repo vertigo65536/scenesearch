@@ -57,7 +57,11 @@ def searchQuote(q, show=None, showtype=None):
         #).filter(distance__lte=0.5).order_by('distance')
         vector = SearchVector('quote_text')
         query = SearchQuery(q)
-        object_list = Quote.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank')
+        if q == None:
+            q = ""
+        object_list = Quote.objects.filter(quote_text__icontains=q)
+        if not object_list:
+            object_list = Quote.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank')
         if show != None:
             if showtype == "id" or showtype == None:
                 object_list = object_list.filter(episode_id__show_id__show_id = show)
