@@ -18,10 +18,23 @@ let ajax_call = function (endpoint, request_parameters) {
 }
 
 
+show_selector.on('input', function (e) {
+    const request_parameters = {
+        q: user_input.val(), // value of user_input: the HTML element with ID user-input
+        show: $(this).val()
+    }
+    if (scheduled_function) {
+        clearTimeout(scheduled_function)
+    }
+
+    scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
+})
+
 user_input.on('keyup', function () {
 
     const request_parameters = {
-        q: $(this).val() // value of user_input: the HTML element with ID user-input
+        q: $(this).val(), // value of user_input: the HTML element with ID user-input
+        show: show_selector.val()
     }
 
     // start animating the search icon with the CSS class
