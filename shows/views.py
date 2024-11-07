@@ -13,6 +13,7 @@ import os
 import shlex
 from django.http import HttpResponseRedirect
 import datetime
+import string
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -59,7 +60,8 @@ def searchQuote(q, show=None, showtype=None):
         query = SearchQuery(q)
         if q == None:
             q = ""
-        object_list = Quote.objects.filter(quote_text__icontains=q)
+        q = q.translate(str.maketrans('', '', string.punctuation))
+        object_list = Quote.objects.filter(quote_searchable_text__icontains=q)
         if not object_list:
             object_list = Quote.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank')
         if show != None:

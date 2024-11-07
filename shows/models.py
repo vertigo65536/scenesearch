@@ -28,6 +28,7 @@ class Quote(models.Model):
     episode_id = models.ForeignKey('Episode', on_delete=models.CASCADE)
     quote_index = models.IntegerField()
     quote_text = models.CharField(max_length=65536)
+    quote_searchable_text = models.CharField(max_length=65536)
     quote_start = models.TimeField(auto_now=False, auto_now_add=False)
     quote_end = models.TimeField(auto_now=False, auto_now_add=False)
     quote_thumb_path = models.CharField(max_length=65563)

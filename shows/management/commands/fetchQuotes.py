@@ -3,6 +3,7 @@ from shows.models import Show, Quote, Episode
 from django.conf import settings
 import os
 import srt
+import string
 
 class Command(BaseCommand):
     help = "Fetch all quotes from shows in the database"
@@ -84,6 +85,7 @@ class Command(BaseCommand):
                                         episode_id=Episode.objects.get(path=vidPath),
                                         quote_index = sub[i].index,
                                         quote_text = sub[i].content,
+                                        quote_searchable_text = sub[i].content.translate(str.maketrans('', '', string.punctuation)),
                                         quote_start = str(sub[i].start),
                                         quote_end = str(sub[i].end),
                                         quote_thumb_path = quoteThumbPath
