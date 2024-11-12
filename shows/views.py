@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, ListView
 from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.conf import settings
-from django.contrib.postgres.search import TrigramStrictWordDistance
+#from django.contrib.postgres.search import TrigramStrictWordDistance
 from django.templatetags.static import static
 
 from django.template.loader import render_to_string
@@ -57,7 +57,7 @@ def searchQuote(q, show=None, showtype=None):
         #    distance=TrigramStrictWordDistance(query, 'quote_text'),
         #).filter(distance__lte=0.5).order_by('distance')
         vector = SearchVector('quote_text')
-        query = SearchQuery(q)
+        query = SearchQuery(q, search_type="phrase")
         if q == None:
             q = ""
         q = q.translate(str.maketrans('', '', string.punctuation))
