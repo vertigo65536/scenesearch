@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = "Fetch all quotes from shows in the database"
 
     def add_arguments(self, parser):
-        parser.add_argument("-f", "--force", help="Force Readding", action='store_true')
+        parser.add_argument("-f", "--force", help="Force Show", nargs="?", default=False, type=int)
 
     def handle(self, *args, **options):
 
@@ -41,10 +41,11 @@ class Command(BaseCommand):
                 print()
 
 
-
-        if options['force'] == True:
+        if options['force'] == None:
             Episode.objects.all().delete()
-            Quote.objects.all().delete()
+        elif options['force'] != False:
+            show = Show.objects.get(pk=options['force'])
+            Episode.objects.filter(show_id=show).all().delete()
         #return
         showlist = Show.objects.all()
         thumbPath = settings.CLIP_ROOT
