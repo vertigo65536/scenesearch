@@ -32,10 +32,10 @@ def add_time(time, value):
     second = time.second
     microsecond = time.second
     second = second + value
-    if second > 60:
+    if second >= 60:
         second -= 60
         minute += 1
-        if minute > 60:
+        if minute >= 60:
             minute -= 60
             hour += 1
     elif second < 00:
