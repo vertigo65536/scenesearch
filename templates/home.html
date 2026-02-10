@@ -39,13 +39,12 @@
                         .then((output) => {
                                 const results_list = document.getElementById("results-list");
                                 results_list.innerHTML = "";
-                                console.log(output);
                                 for (let i = 0; i < output.length; i++) {
                                         let list_html = `
                                         <li>
                                         <form action="{% url 'genclip' %}" method="post">
                                                 `.concat(output[i]['fields']['quote_text']).concat(`
-                                                <input type="hidden" id="clip_id" name="q" value="`).concat(output[i]['fields']['quote_index']).concat(`"</input>
+                                                <input type="hidden" id="clip_id" name="q" value="`).concat(output[i]['pk']).concat(`"</input>
                                                 <button type="submit" id="start_button" name="t" value="s">Start with quote</button>
                                                 <button type="submit" id="end_button" name="t" value="e">end with quote</button>
                                                 <button type="submit" id="middle_button" name="t" value="c">Center quote</button>
@@ -62,7 +61,6 @@
                         if (timeoutID) {
                                 clearTimeout(timeoutID);
                         }
-                        console.log($("#search-box").val());
                         if ($("#search-box").val() != "") {
                                 timeoutID = setTimeout(() => {
                                         get_query();

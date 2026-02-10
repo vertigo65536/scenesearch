@@ -32,7 +32,6 @@ def searchresults(request):
             object_list = Quote.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by
         if show != "all":
             object_list = object_list.filter(episode_id__show_id__name = show)
-        print(object_list.values())
     except Quote.DoesNotExist:
         return None
     data = serializers.serialize('json', object_list)
@@ -46,7 +45,6 @@ def get_clipdata(request):
         tValue = request.POST.get('t')
         qValue = request.POST.get('q')
         quote = Quote.objects.get(quote_id=qValue)
-        print(quote)
         if tValue == 's':
             start = quote.quote_start
             hour = start.hour
@@ -77,14 +75,12 @@ def get_clipdata(request):
                 newEntry.delete()
                 variables['error'] = "ffmpeg encoding failed!"
             else:
-                print(path)
                 newEntry.clip_path = path
                 newEntry.save()
             variables['video'] = settings.MEDIA_SERVER + outputname
             return render(request, template_name, variables)
         else:
             for clip in existCheck:
-                print(clip)
                 videoLink = clip.clip_path.replace(settings.CLIP_ROOT, settings.MEDIA_SERVER)
                 variables['video'] = videoLink
         return render(request, template_name, variables)
