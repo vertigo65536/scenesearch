@@ -59,8 +59,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'shows',
-    'rest_framework',
-    'rest_framework_api_key',
 ]
 
 MIDDLEWARE = [
@@ -162,8 +160,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CLIP_ROOT =  os.getenv("CLIP_ROOT") 
 MEDIA_SERVER = os.getenv("MEDIA_SERVER")
 
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework_api_key.permissions.HasAPIKey",
-    ]
-}

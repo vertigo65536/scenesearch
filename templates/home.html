@@ -18,13 +18,57 @@
                                           {% endfor %}
                                 </select>
                                 <div id="search-results">
-                                        {% include 'home-search-results.html' %}
+                                        <!--{% include 'home-search-results.html' %}-->
+                                        <ul id="results-list">
+                                        </ul>
                                 </div>
                         </div>
                 </div>
         </div>
 </body>
 {% block footer %}
-        <script type="text/javascript" src="{% static "js/home.js" %}"></script>
+<!--<script type="text/javascript" src="{% static "js/home.js" %}"></script>-->
+        <script>
+                const user_input = document.getElementById("search-box");
+                const show_selector = document.getElementById("show-selector");
+                let timeoutID;
+                const DELAY = 300;
+                function get_query() {
+                    fetch('{% url "searchresults" %}?q='.concat(user_input.value).concat("&s=").concat(show_selector.value))
+                        .then(result => result.json())
+                        .then((output) => {
+                                const results_list = document.getElementById("results-list");
+                                results_list.innerHTML = "";
+                                console.log(output);
+                                for (let i = 0; i < output.length; i++) {
+                                        let list_html = `
+                                        <li>
+                                        <form action="{% url 'genclip' %}" method="post">
+                                                `.concat(output[i]['fields']['quote_text']).concat(`
+                                                <input type="hidden" id="clip_id" name="q" value="`).concat(output[i]['fields']['quote_index']).concat(`"</input>
+                                                <button type="submit" id="start_button" name="t" value="s">Start with quote</button>
+                                                <button type="submit" id="end_button" name="t" value="e">end with quote</button>
+                                                <button type="submit" id="middle_button" name="t" value="c">Center quote</button>
+                                                <button type="submit" id="middle_button" name="t" value="j">Just quote</button>
+                                        </form>
+                                        </li>
+                                        `);
+                                        results_list.innerHTML+=list_html;
+                                };
+                        });
+                }
+                
+                $("#search-box").on('input', function () {
+                        if (timeoutID) {
+                                clearTimeout(timeoutID);
+                        }
+                        console.log($("#search-box").val());
+                        if ($("#search-box").val() != "") {
+                                timeoutID = setTimeout(() => {
+                                        get_query();
+                                }, DELAY);
+                        }
+                });
+        </script>
 {% endblock %}
 </html>

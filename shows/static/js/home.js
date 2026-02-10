@@ -17,8 +17,19 @@ let ajax_call = function (endpoint, request_parameters) {
         })
 }
 
+function get_query() {
+    fetch('{% url "searchresults" %}?q='.concat(user_input).concat("&s=").concat(show_selector))
+        .then(result => result.json())
+        .then((output) => {
+                console.log("1");
+        }
+}
 
-show_selector.on('input', function (e) {
+user_input.on('keyup', function () {
+        get_query();
+});
+
+/*show_selector.on('input', function (e) {
     const request_parameters = {
         q: user_input.val(), // value of user_input: the HTML element with ID user-input
         show: $(this).val()
@@ -47,4 +58,4 @@ user_input.on('keyup', function () {
 
     // setTimeout returns the ID of the function to be executed
     scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
-})
+})*/
