@@ -33,38 +33,41 @@
                 let timeoutID;
                 const DELAY = 300;
                 function get_query() {
-                    fetch('{% url "searchresults" %}?q='.concat(user_input.value).concat("&s=").concat(show_selector.value))
-                        .then(result => result.json())
-                        .then((output) => {
-                                const results_list = document.getElementById("results-list");
-                                results_list.innerHTML = "";
-                                for (let i = 0; i < output.length; i++) {
-                                        let list_html = `
-                                        <li>
-                                        <form action="{% url 'genclip' %}" method="post">
-                                                `.concat(output[i]['fields']['quote_text']).concat(`
-                                                <input type="hidden" id="clip_id" name="q" value="`).concat(output[i]['pk']).concat(`"</input>
-                                                <button type="submit" id="start_button" name="t" value="s">Start with quote</button>
-                                                <button type="submit" id="end_button" name="t" value="e">end with quote</button>
-                                                <button type="submit" id="middle_button" name="t" value="c">Center quote</button>
-                                                <button type="submit" id="middle_button" name="t" value="j">Just quote</button>
-                                        </form>
-                                        </li>
-                                        `);
-                                        results_list.innerHTML+=list_html;
-                                };
-                        });
+                        if ($("#search-box").val() != "") {
+                                fetch('{% url "searchresults" %}?q='.concat(user_input.value).concat("&s=").concat(show_selector.value))
+                                .then(result => result.json())
+                                .then((output) => {
+                                        const results_list = document.getElementById("results-list");
+                                        results_list.innerHTML = "";
+                                        for (let i = 0; i < output.length; i++) {
+                                                let list_html = `
+                                                <li>
+                                                <form action="{% url 'genclip' %}" method="post">
+                                                        `.concat(output[i]['fields']['quote_text']).concat(`
+                                                        <input type="hidden" id="clip_id" name="q" value="`).concat(output[i]['pk']).concat(`"></input>
+                                                        <button type="submit" id="start_button" name="t" value="s">Start with quote</button>
+                                                        <button type="submit" id="end_button" name="t" value="e">end with quote</button>
+                                                        <button type="submit" id="middle_button" name="t" value="c">Center quote</button>
+                                                        <button type="submit" id="middle_button" name="t" value="j">Just quote</button>
+                                                </form>
+                                                </li>
+                                                `);
+                                                results_list.innerHTML+=list_html;
+                                        };
+                                });
+                        }
                 }
                 
                 $("#search-box").on('input', function () {
                         if (timeoutID) {
                                 clearTimeout(timeoutID);
                         }
-                        if ($("#search-box").val() != "") {
-                                timeoutID = setTimeout(() => {
-                                        get_query();
-                                }, DELAY);
-                        }
+                        timeoutID = setTimeout(() => {
+                                get_query();
+                        }, DELAY);
+                });
+                $("#show-selector").on('input', function () {
+                        get_query();
                 });
         </script>
 {% endblock %}
