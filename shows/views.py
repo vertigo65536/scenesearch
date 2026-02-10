@@ -30,7 +30,7 @@ def searchresults(request):
         object_list = Quote.objects.filter(quote_searchable_text__icontains=q)
         if not object_list:
             object_list = Quote.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by()
-        :x
+        if show != "all":
             object_list = object_list.filter(episode_id__show_id__name = show)
         print(object_list)
         object_list = object_list[:50]
